@@ -13,4 +13,8 @@ public class User {
     private String email;
     private String password;
     private String role;
+
+    public boolean verifyPassword(String inputPassword) {
+        return this.password != null && this.password.equals(inputPassword);
+    }
 }
