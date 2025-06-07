@@ -1,4 +1,4 @@
-package org.example.dtos.responses;
+package org.AuctionSystemEbay.dtos.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
