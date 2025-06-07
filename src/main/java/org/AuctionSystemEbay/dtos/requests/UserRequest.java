@@ -1,11 +1,11 @@
-package org.example.dtos.responses;
+package org.AuctionSystemEbay.dtos.requests;
 
 import lombok.Data;
 
 @Data
-public class UserResponse {
-    private String userId;
+public class UserRequest {
     private String username;
     private String email;
+    private String password;
     private String role;
 }
