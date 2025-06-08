@@ -1,4 +1,4 @@
-package org.example.data.models;
+package org.AuctionSystemEbay.data.models;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
