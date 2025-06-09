@@ -42,5 +42,30 @@ public class UserServiceImpl implements UserService {
         return Mapper.toUserResponse(savedUser);
     }
 
+    @Override
+    public UserResponse updateUserRole(String userId, UpdateRoleRequest request) throws UserNotFoundException {
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new IllegalArgumentException("User ID cannot be null or empty");
+        }
+        if (request == null || request.getNewRole() == null || request.getNewRole().trim().isEmpty()) {
+            throw new IllegalArgumentException("New role cannot be null or empty");
+        }
 
-}
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+
+        String newRole = request.getNewRole().toUpperCase();
+        if (newRole.equals(user.getRole())) {
+            throw new IllegalArgumentException("User already has the role: " + newRole);
+        }
+
+        if (!("BUYER".equals(newRole) || "SELLER".equals(newRole))) {
+            throw new IllegalArgumentException("Role must be either BUYER or SELLER");
+        }
+
+        user.setRole(newRole);
+        User updatedUser = userRepository.save(user);
+
+        return Mapper.toUserResponse(updatedUser);
+    }
+
