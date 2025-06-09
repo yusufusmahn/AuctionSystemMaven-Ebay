@@ -8,4 +8,5 @@ import java.util.List;
 public interface BidService {
     BidResponse placeBid(BidRequest bidRequest);
     List<BidResponse> getBidsByAuctionItemId(String auctionItemId);
+    List<BidResponse> getActiveBids();
 }
