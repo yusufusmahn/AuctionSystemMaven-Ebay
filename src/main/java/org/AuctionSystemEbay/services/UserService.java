@@ -1,14 +1,13 @@
 package org.AuctionSystemEbay.services;
 
 
-import org.AuctionSystemEbay.dtos.requests.LoginRequest;
-import org.AuctionSystemEbay.dtos.requests.UserRequest;
-import org.AuctionSystemEbay.dtos.responses.LoginResponse;
-import org.AuctionSystemEbay.dtos.responses.UserResponse;
+import org.AuctionSystemEbay.dtos.requests.*;
+import org.AuctionSystemEbay.dtos.responses.*;
 
 public interface UserService {
     UserResponse createUser(UserRequest userRequest);
     UserResponse getUserById(String userId);
     UserResponse getUserByEmail(String email);
     LoginResponse login(LoginRequest loginRequest);
+    UserResponse updateUserRole(String userId, UpdateRoleRequest request);
 }
