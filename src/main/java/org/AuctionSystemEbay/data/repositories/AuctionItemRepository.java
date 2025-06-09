@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface AuctionItemRepository extends MongoRepository<org.AuctionSystemEbay.data.models.AuctionItem, String> {
     List<AuctionItem> findBySellerUserId(String userId);
-    List<AuctionItem> findByStatus(String status);
     List<AuctionItem> findByStatusAndEndTimeAfter(String status, LocalDateTime endTime);
     List<AuctionItem> findByStatusAndEndTimeBefore(String status, LocalDateTime endTime);
 }
