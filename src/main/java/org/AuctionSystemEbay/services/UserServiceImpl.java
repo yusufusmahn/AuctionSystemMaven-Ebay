@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateUserRole(String userId, UpdateRoleRequest request) throws UserNotFoundException {
+    public UserResponse updateUserRole(String userId, UpdateRoleRequest request) {
         if (userId == null || userId.trim().isEmpty()) {
             throw new IllegalArgumentException("User ID cannot be null or empty");
         }
@@ -69,3 +69,37 @@ public class UserServiceImpl implements UserService {
         return Mapper.toUserResponse(updatedUser);
     }
 
+
+    @Override
+    public UserResponse getUserById(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        return Mapper.toUserResponse(user);
+    }
+
+
+    @Override
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(Mapper.convertToLowerCase(email));
+        if (user == null) {
+            throw new UserNotFoundException("User not found with email: " + email);
+        }
+        return Mapper.toUserResponse(user);
+    }
+
+
+    @Override
+    public LoginResponse login(LoginRequest loginRequest) {
+        String transformedEmail = Mapper.convertToLowerCase(loginRequest.getEmail());
+        User user = userRepository.findByEmail(transformedEmail);
+        if (user == null) {
+            throw new UserNotFoundException("User not found with email: " + transformedEmail);
+        }
+        if (!user.verifyPassword(loginRequest.getPassword())) {
+            throw new InvalidCredentialsException("Invalid password");
+        }
+
+        return Mapper.toLoginResponse(user, "Login successful");
+    }
+
+}
