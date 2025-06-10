@@ -27,4 +27,46 @@ public class AuctionItemController {
         }
     }
 
+
+    @GetMapping("/{itemId}")
+    public ResponseEntity<?> getAuctionItemById(@PathVariable("itemId") String itemId) {
+        try {
+            AuctionItemResponse response = auctionItemService.getAuctionItemById(itemId);
+            return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<?> getAuctionItemsBySellerId(@PathVariable("sellerId") String sellerId) {
+        try {
+            List<AuctionItemResponse> responses = auctionItemService.getAuctionItemsBySellerId(sellerId);
+            return new ResponseEntity<>(new ApiResponse(responses, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveAuctionItems() {
+        try {
+            List<AuctionItemResponse> responses = auctionItemService.getActiveAuctionItems();
+            return new ResponseEntity<>(new ApiResponse(responses, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PostMapping("/close-expired")
+    public ResponseEntity<?> closeExpiredAuctions() {
+        try {
+            auctionItemService.closeExpiredAuctions();
+            return new ResponseEntity<>(new ApiResponse("Expired auctions closed successfully", true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
