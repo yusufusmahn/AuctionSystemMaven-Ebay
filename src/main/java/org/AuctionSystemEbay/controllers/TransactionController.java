@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
@@ -25,6 +27,28 @@ public class TransactionController {
             return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.CREATED);
         } catch (AuctionSystemException e) {
             return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getTransactionsByUser(@PathVariable("userId") String userId) {
+        try {
+            List<TransactionResponse> responses = transactionService.getTransactionsByUserId(userId);
+            return new ResponseEntity<>(new ApiResponse(responses, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveTransactions() {
+        try {
+            List<TransactionResponse> responses = transactionService.getActiveTransactions();
+            return new ResponseEntity<>(new ApiResponse(responses, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
