@@ -48,4 +48,23 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable("userId") String userId) {
+        try {
+            UserResponse response = userService.getUserById(userId);
+            return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email) {
+        try {
+            UserResponse response = userService.getUserByEmail(email);
+            return new ResponseEntity<>(new ApiResponse(response, true), HttpStatus.OK);
+        } catch (AuctionSystemException e) {
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
