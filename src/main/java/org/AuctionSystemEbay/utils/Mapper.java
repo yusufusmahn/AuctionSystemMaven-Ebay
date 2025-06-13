@@ -60,7 +60,7 @@ public class Mapper {
         User user = new User();
         user.setUsername(toSentenceCase(userRequest.getUsername()));
         user.setEmail(convertToLowerCase(userRequest.getEmail()));
-        user.setPassword(userRequest.getPassword());
+//        user.setPassword(userRequest.getPassword());
         user.setRole(userRequest.getRole());
         return user;
     }
@@ -69,6 +69,9 @@ public class Mapper {
         LoginResponse response = new LoginResponse();
         response.setUserId(user.getUserId());
         response.setUsername(toSentenceCase(user.getUsername()));
+
+        response.setEmail(Mapper.convertToLowerCase(user.getEmail()));
+
         response.setRole(convertToLowerCase(user.getRole()));
         response.setMessage(message);
         return response;
@@ -129,7 +132,7 @@ public class Mapper {
         Bid bid = new Bid();
         bid.setBidAmount(bidRequest.getBidAmount());
         bid.setAuctionItemId(bidRequest.getAuctionItemId());
-        bid.setBidTime(LocalDateTime.now());
+//      bid.setBidTime(LocalDateTime.now());
         return bid;
     }
 
@@ -159,7 +162,7 @@ public class Mapper {
         Transaction transaction = new Transaction();
         transaction.setAuctionItemId(transactionRequest.getAuctionItemId());
         transaction.setFinalPrice(transactionRequest.getFinalPrice());
-        transaction.setTransactionTime(LocalDateTime.now());
+//        transaction.setTransactionTime(LocalDateTime.now());
         return transaction;
     }
 

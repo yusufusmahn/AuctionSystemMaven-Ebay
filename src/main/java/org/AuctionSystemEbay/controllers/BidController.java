@@ -47,7 +47,7 @@ public class BidController {
             List<BidResponse> responses = bidService.getActiveBids();
             return new ResponseEntity<>(new ApiResponse(responses, true), HttpStatus.OK);
         } catch (AuctionSystemException e) {
-            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.NOT_FOUND);
         }
     }
 }

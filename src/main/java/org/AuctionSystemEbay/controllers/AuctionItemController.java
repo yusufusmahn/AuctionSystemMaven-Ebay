@@ -5,6 +5,7 @@ import org.AuctionSystemEbay.dtos.responses.*;
 import org.AuctionSystemEbay.exceptions.AuctionSystemException;
 import org.AuctionSystemEbay.services.*;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -60,6 +61,8 @@ public class AuctionItemController {
     }
 
 
+
+    @Scheduled(fixedRate = 60000)
     @PostMapping("/close-expired")
     public ResponseEntity<?> closeExpiredAuctions() {
         try {
@@ -69,4 +72,16 @@ public class AuctionItemController {
             return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
     }
+
+
+
+
+//    public void autoCloseExpiredAuctions() {
+//        try {
+//            auctionItemService.closeExpiredAuctions();
+//            System.out.println("Automatically closed expired auctions at " + new java.util.Date());
+//        } catch (AuctionSystemException e) {
+//            System.out.println("Error auto-closing expired auctions: " + e.getMessage());
+//        }
+//    }
 }

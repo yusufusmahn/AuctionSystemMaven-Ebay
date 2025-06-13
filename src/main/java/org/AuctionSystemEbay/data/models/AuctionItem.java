@@ -15,10 +15,10 @@ public class AuctionItem {
     private String title;
     private String description;
     private Double startingBid;
-    private Double currentBid;
+    private Double currentBid = 0.0;
     private Double buyItNowPrice;
     @DBRef
     private User seller;
     private LocalDateTime endTime;
-    private String status;
+    private String status= "ACTIVE";
 }

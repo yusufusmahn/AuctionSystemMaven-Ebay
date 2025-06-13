@@ -2,8 +2,8 @@ package org.AuctionSystemEbay.services;
 
 import org.AuctionSystemEbay.data.models.*;
 import org.AuctionSystemEbay.data.repositories.*;
-import org.AuctionSystemEbay.data.repositories.AuctionItemRepository;
 import org.AuctionSystemEbay.dtos.requests.BidRequest;
+import org.AuctionSystemEbay.dtos.requests.TransactionRequest;
 import org.AuctionSystemEbay.dtos.responses.*;
 import org.AuctionSystemEbay.exceptions.*;
 import org.AuctionSystemEbay.utils.Mapper;
@@ -29,6 +29,9 @@ public class BidServiceImpl implements BidService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TransactionService transactionService;
+
 
     @Override
     public BidResponse placeBid(BidRequest bidRequest) {
@@ -36,8 +39,13 @@ public class BidServiceImpl implements BidService {
             throw new IllegalArgumentException("Auction item ID, bid amount, and bidder ID are required");
         }
 
+        if (bidRequest.getBidAmount() <= 0) {
+            throw new InvalidBidException("Bid amount must be greater than 0");
+        }
+
         Bid bid = Mapper.toBid(bidRequest);
         bid.setBidId(idService.generateUniqueId());
+        bid.setBidTime(LocalDateTime.now());
 
         User bidder = userRepository.findById(bidRequest.getBidderId())
                 .orElseThrow(() -> new UserNotFoundException("Bidder not found with ID: " + bidRequest.getBidderId()));
@@ -50,6 +58,10 @@ public class BidServiceImpl implements BidService {
             throw new AuctionExpiredException("Auction has expired for item ID: " + auctionItem.getItemId());
         }
 
+        if ("CLOSED".equalsIgnoreCase(auctionItem.getStatus())) {
+            throw new AuctionClosedException("Cannot place bid on a closed auction with ID: " + auctionItem.getItemId());
+        }
+
         Double currentBid = auctionItem.getCurrentBid();
         if (currentBid == null) {
             currentBid = auctionItem.getStartingBid();
@@ -58,13 +70,25 @@ public class BidServiceImpl implements BidService {
             throw new InvalidBidException("Bid amount must be higher than current bid: " + currentBid);
         }
 
-        auctionItem.setCurrentBid(bid.getBidAmount());
-        auctionItemRepository.save(auctionItem);
+
+        Double buyItNowPrice = auctionItem.getBuyItNowPrice();
+        if (buyItNowPrice != null && bid.getBidAmount() >= buyItNowPrice) {
+            auctionItem.setStatus("CLOSED");
+            auctionItem.setCurrentBid(bid.getBidAmount());
+            auctionItemRepository.save(auctionItem);
+
+            TransactionRequest transactionRequest = Mapper.toTransactionRequestFromAuctionAndBid(auctionItem, bid);
+            transactionService.createTransaction(transactionRequest);
+
+        } else {
+            auctionItem.setCurrentBid(bid.getBidAmount());
+            auctionItemRepository.save(auctionItem);
+        }
 
         Bid savedBid = bidRepository.save(bid);
         return Mapper.toBidResponse(savedBid);
-    }
 
+    }
 
     @Override
     public List<BidResponse> getBidsByAuctionItemId(String auctionItemId) {

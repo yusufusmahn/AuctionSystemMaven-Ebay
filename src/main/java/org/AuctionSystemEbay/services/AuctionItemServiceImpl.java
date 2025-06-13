@@ -42,6 +42,15 @@ public class AuctionItemServiceImpl implements AuctionItemService {
             throw new IllegalArgumentException("Title cannot exceed 100 characters");
         }
 
+        if (auctionItemRequest.getStartingBid() <= 0) {
+            throw new AuctionItemCreationException("Starting bid must be greater than 0");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (auctionItemRequest.getEndTime() == null || auctionItemRequest.getEndTime().isBefore(now)) {
+            throw new AuctionItemCreationException("End time must be in the future");
+        }
+
         AuctionItem auctionItem = Mapper.toAuctionItem(auctionItemRequest);
         auctionItem.setItemId(idService.generateUniqueId());
 

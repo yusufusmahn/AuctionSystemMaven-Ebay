@@ -17,4 +17,7 @@ public class User {
     public boolean verifyPassword(String inputPassword) {
         return this.password != null && this.password.equals(inputPassword);
     }
+
+
+
 }

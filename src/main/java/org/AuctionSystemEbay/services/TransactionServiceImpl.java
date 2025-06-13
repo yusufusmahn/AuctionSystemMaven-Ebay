@@ -43,6 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = Mapper.toTransaction(transactionRequest);
         transaction.setTransactionId(idService.generateUniqueId());
         transaction.setBuyer(buyer);
+        transaction.setTransactionTime(LocalDateTime.now());
         Transaction savedTransaction = transactionRepository.save(transaction);
         return Mapper.toTransactionResponse(savedTransaction);
     }

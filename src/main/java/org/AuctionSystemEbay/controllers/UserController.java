@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/api/users")
+//@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserRequest userRequest) {
@@ -48,6 +50,9 @@ public class UserController {
         }
     }
 
+
+
+
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable("userId") String userId) {
         try {
@@ -67,4 +72,6 @@ public class UserController {
             return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }
