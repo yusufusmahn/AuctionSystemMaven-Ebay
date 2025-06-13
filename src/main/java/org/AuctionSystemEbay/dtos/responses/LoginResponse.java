@@ -6,9 +6,8 @@ import lombok.Data;
 public class LoginResponse {
     private String userId;
     private String username;
-    private String email;
+//    private String email;
     private String role;
     private String message;
-    private String token; // Added for JWT
 }
 

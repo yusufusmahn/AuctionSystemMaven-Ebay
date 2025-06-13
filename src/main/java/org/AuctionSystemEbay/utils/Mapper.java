@@ -70,7 +70,7 @@ public class Mapper {
         response.setUserId(user.getUserId());
         response.setUsername(toSentenceCase(user.getUsername()));
 
-        response.setEmail(Mapper.convertToLowerCase(user.getEmail()));
+//        response.setEmail(Mapper.convertToLowerCase(user.getEmail()));
 
         response.setRole(convertToLowerCase(user.getRole()));
         response.setMessage(message);
