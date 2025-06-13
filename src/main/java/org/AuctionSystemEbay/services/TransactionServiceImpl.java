@@ -62,8 +62,11 @@ public class TransactionServiceImpl implements TransactionService {
             if (transaction.getBuyer() != null && userId.equals(transaction.getBuyer().getUserId())) {
                 userTransactions.add(Mapper.toTransactionResponse(transaction));
             }
+            AuctionItem auction = auctionItemRepository.findById(transaction.getAuctionItemId()).orElse(null);
+            if (auction != null && auction.getSeller() != null && userId.equals(auction.getSeller().getUserId())) {
+                userTransactions.add(Mapper.toTransactionResponse(transaction));
+            }
         }
-
         return userTransactions;
     }
 
