@@ -78,7 +78,10 @@ public class BidServiceImpl implements BidService {
             auctionItemRepository.save(auctionItem);
 
             TransactionRequest transactionRequest = Mapper.toTransactionRequestFromAuctionAndBid(auctionItem, bid);
-            transactionService.createTransaction(transactionRequest);
+            TransactionResponse transactionResponse = transactionService.createTransaction(transactionRequest);
+            if (transactionResponse == null) {
+                throw new TransactionCreationException("Failed to create transaction for Buy It Now purchase");
+            }
 
         } else {
             auctionItem.setCurrentBid(bid.getBidAmount());
