@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
 
         User user = Mapper.toUser(userRequest);
         user.setUserId(idService.generateUniqueId());
-        String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
-        user.setPassword(hashedPassword);
-//        String hashedPassword = userRequest.getPassword();
+//        String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
 //        user.setPassword(hashedPassword);
+        String hashedPassword = userRequest.getPassword();
+        user.setPassword(hashedPassword);
 
         User savedUser = userRepository.save(user);
         return Mapper.toUserResponse(savedUser);
@@ -101,13 +101,11 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UserNotFoundException("User not found with email: " + transformedEmail);
         }
-//        if (!user.verifyPassword(loginRequest.getPassword())) {
-//            throw new InvalidCredentialsException("Invalid password");
-//        }
-
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+        if (!user.verifyPassword(loginRequest.getPassword())) {
             throw new InvalidCredentialsException("Invalid password");
         }
+
+
 
         return Mapper.toLoginResponse(user, "Login successful");
     }
