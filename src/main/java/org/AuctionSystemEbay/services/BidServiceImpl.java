@@ -54,6 +54,11 @@ public class BidServiceImpl implements BidService {
         AuctionItem auctionItem = auctionItemRepository.findById(bid.getAuctionItemId())
                 .orElseThrow(() -> new ItemNotFoundException("Auction item not found with ID: " + bid.getAuctionItemId()));
 
+
+        if (auctionItem.getSeller() != null && auctionItem.getSeller().getUserId().equals(bidder.getUserId())) {
+            throw new InvalidBidException("You cannot bid on an item you listed for auction");
+        }
+
         if (auctionItem.getEndTime().isBefore(LocalDateTime.now())) {
             throw new AuctionExpiredException("Auction has expired for item ID: " + auctionItem.getItemId());
         }
