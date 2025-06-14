@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
-class AuctionItemRepositoryServiceImplTest {
+ public class AuctionItemRepositoryServiceImplTest {
 
     @Autowired
     private AuctionItemService auctionItemService;
@@ -37,24 +37,24 @@ class AuctionItemRepositoryServiceImplTest {
     private TransactionRepository transactionRepository;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         auctionItemRepository.deleteAll();
         userRepository.deleteAll();
         bidRepository.deleteAll();
 
         User testUser = new User();
         testUser.setUserId("123456");
-        testUser.setUsername("John Doe");
-        testUser.setEmail("john@email.com");
-        testUser.setPassword("password123");
+        testUser.setUsername("testUser");
+        testUser.setEmail("testUser@gmail.com");
+        testUser.setPassword("password");
         testUser.setRole("SELLER");
         userRepository.save(testUser);
 
         User buyer = new User();
         buyer.setUserId("789012");
-        buyer.setUsername("Jane Doe");
-        buyer.setEmail("jane@email.com");
-        buyer.setPassword("password123");
+        buyer.setUsername("NewBuyer");
+        buyer.setEmail("buyer@gmail.com");
+        buyer.setPassword("password");
         buyer.setRole("BUYER");
         userRepository.save(buyer);
 
@@ -72,7 +72,7 @@ class AuctionItemRepositoryServiceImplTest {
     }
 
     @Test
-    void createAuctionItem_Success() {
+    public void createAuctionItem_Success() {
         AuctionItemRequest auctionItemRequest = new AuctionItemRequest();
         auctionItemRequest.setTitle("Phone");
         auctionItemRequest.setDescription("New phone");
@@ -88,7 +88,7 @@ class AuctionItemRepositoryServiceImplTest {
     }
 
     @Test
-    void createAuctionItem_SellerNotFound_ThrowsException() {
+    public void createAuctionItem_SellerNotFound_ThrowsException() {
         AuctionItemRequest auctionItemRequest = new AuctionItemRequest();
         auctionItemRequest.setTitle("Phone");
         auctionItemRequest.setDescription("New phone");
@@ -101,7 +101,7 @@ class AuctionItemRepositoryServiceImplTest {
     }
 
     @Test
-    void createAuctionItem_BuyerRole_ThrowsException() {
+    public void createAuctionItem_BuyerRole_ThrowsException() {
         AuctionItemRequest auctionItemRequest = new AuctionItemRequest();
         auctionItemRequest.setTitle("Phone");
         auctionItemRequest.setDescription("New phone");
@@ -115,38 +115,38 @@ class AuctionItemRepositoryServiceImplTest {
 
 
     @Test
-    void getAuctionItemById_Success() {
+    public void getAuctionItemById_Success() {
         AuctionItemResponse response = auctionItemService.getAuctionItemById("654321");
         assertNotNull(response);
         assertEquals("Laptop", response.getTitle());
     }
 
     @Test
-    void getAuctionItemById_NotFound_ThrowsException() {
+    public void getAuctionItemById_NotFound_ThrowsException() {
         assertThrows(ItemNotFoundException.class, () -> auctionItemService.getAuctionItemById("nonexistent"));
     }
 
     @Test
-    void getAuctionItemsBySellerId_Success() {
+    public void getAuctionItemsBySellerId_Success() {
         List<AuctionItemResponse> responses = auctionItemService.getAuctionItemsBySellerId("123456");
         assertFalse(responses.isEmpty());
         assertEquals("Laptop", responses.get(0).getTitle());
     }
 
     @Test
-    void getAuctionItemsBySellerId_SellerNotFound_ThrowsException() {
+    public void getAuctionItemsBySellerId_SellerNotFound_ThrowsException() {
         assertThrows(SellerNotFoundException.class, () -> auctionItemService.getAuctionItemsBySellerId("nonexistent"));
     }
 
     @Test
-    void getActiveAuctionItems_Success() {
+    public void getActiveAuctionItems_Success() {
         List<AuctionItemResponse> responses = auctionItemService.getActiveAuctionItems();
         assertFalse(responses.isEmpty());
         assertEquals("ACTIVE", responses.get(0).getStatus());
     }
 
     @Test
-    void closeExpiredAuctions_Success() {
+    public void closeExpiredAuctions_Success() {
         AuctionItem expiredItem = new AuctionItem();
         expiredItem.setItemId("987654");
         expiredItem.setTitle("Expired Laptop");
