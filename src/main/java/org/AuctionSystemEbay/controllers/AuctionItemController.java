@@ -74,14 +74,4 @@ public class AuctionItemController {
     }
 
 
-
-
-//    public void autoCloseExpiredAuctions() {
-//        try {
-//            auctionItemService.closeExpiredAuctions();
-//            System.out.println("Automatically closed expired auctions at " + new java.util.Date());
-//        } catch (AuctionSystemException e) {
-//            System.out.println("Error auto-closing expired auctions: " + e.getMessage());
-//        }
-//    }
 }
