@@ -22,121 +22,114 @@ public class UserServiceImplTest {
     private UserRepository userRepository;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         userRepository.deleteAll();
 
         User testUser = new User();
         testUser.setUserId("123456");
-        testUser.setUsername("John Doe");
-        testUser.setEmail("john@email.com");
-        testUser.setPassword("password123");
+        testUser.setUsername("testuser");
+        testUser.setEmail("testuser@gmail.com");
+        testUser.setPassword("password");
         testUser.setRole("BUYER");
         userRepository.save(testUser);
     }
 
     @Test
-    void createUser_Success() {
+    public void createUser_Success() {
         UserRequest userRequest = new UserRequest();
-        userRequest.setUsername("jane");
-        userRequest.setEmail("jane@email.com");
+        userRequest.setUsername("testuser2");
+        userRequest.setEmail("testuser2@gmail.com");
         userRequest.setPassword("password");
         userRequest.setRole("SELLER");
 
         UserResponse response = userService.createUser(userRequest);
         assertNotNull(response);
         assertNotNull(response.getUserId());
-        assertEquals("Jane", response.getUsername());
-        assertEquals("jane@email.com", response.getEmail());
+        assertEquals("Testuser2", response.getUsername());
+        assertEquals("testuser2@gmail.com", response.getEmail());
     }
 
     @Test
-    void createUser_DuplicateEmail_ThrowsException() {
+    public void createUser_DuplicateEmail_ThrowsException() {
         UserRequest userRequest = new UserRequest();
-        userRequest.setUsername("john");
-        userRequest.setEmail("john@email.com");
+        userRequest.setUsername("testuser");
+        userRequest.setEmail("testuser@gmail.com");
         userRequest.setPassword("password");
         userRequest.setRole("BUYER");
 
         assertThrows(DuplicateUserException.class, () -> userService.createUser(userRequest));
     }
 
-
     @Test
-    void login_Success() {
+    public void login_Success() {
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("john@email.com");
-        loginRequest.setPassword("password123");
+        loginRequest.setEmail("testuser@gmail.com");
+        loginRequest.setPassword("password");
 
         LoginResponse response = userService.login(loginRequest);
 
         assertNotNull(response);
         assertNotNull(response.getUserId());
-        assertEquals("John Doe", response.getUsername());
-        assertEquals("BUYER", response.getRole());
+        assertEquals("Testuser", response.getUsername());
+        assertEquals("buyer", response.getRole());
         assertEquals("Login successful", response.getMessage());
     }
 
     @Test
-    void login_InvalidPassword_ReturnsErrorMessage() {
+    public void login_InvalidPassword_ReturnsErrorMessage() {
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("john@email.com");
+        loginRequest.setEmail("testuser@gmail.com");
         loginRequest.setPassword("wrongpassword");
 
-        LoginResponse response = userService.login(loginRequest);
-
-        assertNotNull(response);
-        assertNull(response.getUserId());
-        assertNull(response.getUsername());
-        assertNull(response.getRole());
-        assertEquals("Invalid password", response.getMessage());
+        assertThrows(InvalidCredentialsException.class, () -> userService.login(loginRequest));
     }
 
     @Test
-    void login_UserNotFound_ThrowsUserNotFoundException() {
+    public void login_UserNotFound_ThrowsUserNotFoundException() {
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setEmail("nonexistent@email.com");
-        loginRequest.setPassword("password123");
+        loginRequest.setEmail("nonexistent@gmail.com");
+        loginRequest.setPassword("password");
 
         assertThrows(UserNotFoundException.class, () -> userService.login(loginRequest));
     }
 
     @Test
-    void getUserById_Success() {
+    public void getUserById_Success() {
         UserResponse response = userService.getUserById("123456");
         assertNotNull(response);
-        assertEquals("John Doe", response.getUsername());
+        assertEquals("Testuser", response.getUsername());
     }
 
     @Test
-    void getUserById_NotFound_ThrowsException() {
+    public void getUserById_NotFound_ThrowsException() {
         assertThrows(UserNotFoundException.class, () -> userService.getUserById("nonexistent"));
     }
 
     @Test
-    void getUserByEmail_Success() {
-        UserResponse response = userService.getUserByEmail("john@email.com");
+    public void getUserByEmail_Success() {
+        UserResponse response = userService.getUserByEmail("testuser@gmail.com");
         assertNotNull(response);
-        assertEquals("John Doe", response.getUsername());
+        assertEquals("Testuser", response.getUsername());
     }
 
     @Test
-    void getUserByEmail_NotFound_ThrowsException() {
+    public void getUserByEmail_NotFound_ThrowsException() {
         assertThrows(UserNotFoundException.class, () -> userService.getUserByEmail("nonexistent@email.com"));
     }
 
     @Test
-    void updateUserRole_Success() {
+    public void updateUserRole_Success() {
         UpdateRoleRequest request = new UpdateRoleRequest();
         request.setNewRole("SELLER");
 
         UserResponse response = userService.updateUserRole("123456", request);
         assertNotNull(response);
-        assertEquals("SELLER", response.getRole().toUpperCase());
-        assertEquals("John Doe", response.getUsername());
+        assertEquals("seller", response.getRole());
+        assertEquals("Testuser", response.getUsername());
     }
 
     @Test
-    void updateUserRole_UserNotFound_ThrowsException() {
+    public void updateUserRole_UserNotFound_ThrowsException() {
         UpdateRoleRequest request = new UpdateRoleRequest();
         request.setNewRole("SELLER");
 
@@ -144,7 +137,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void updateUserRole_InvalidRole_ThrowsException() {
+    public void updateUserRole_InvalidRole_ThrowsException() {
         UpdateRoleRequest request = new UpdateRoleRequest();
         request.setNewRole("ADMIN");
 
@@ -152,7 +145,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void updateUserRole_SameRole_ThrowsException() {
+    public void updateUserRole_SameRole_ThrowsException() {
         UpdateRoleRequest request = new UpdateRoleRequest();
         request.setNewRole("BUYER");
 
