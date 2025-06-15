@@ -78,6 +78,7 @@ public class AuctionItemServiceImpl implements AuctionItemService {
         return Mapper.toAuctionItemResponse(auctionItem);
     }
 
+
     @Override
     public List<AuctionItemResponse> getAuctionItemsBySellerId(String sellerId) {
         if (sellerId == null || sellerId.trim().isEmpty()) {
