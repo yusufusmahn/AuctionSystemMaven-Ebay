@@ -1,8 +1,7 @@
 package org.AuctionSystemEbay.controllers;
 
 import org.AuctionSystemEbay.dtos.requests.BidRequest;
-import org.AuctionSystemEbay.dtos.responses.ApiResponse;
-import org.AuctionSystemEbay.dtos.responses.BidResponse;
+import org.AuctionSystemEbay.dtos.responses.*;
 import org.AuctionSystemEbay.exceptions.AuctionSystemException;
 import org.AuctionSystemEbay.services.BidService;
 import org.springframework.http.HttpStatus;
@@ -50,4 +49,5 @@ public class BidController {
             return new ResponseEntity<>(new ApiResponse(e.getMessage(), false), HttpStatus.NOT_FOUND);
         }
     }
+
 }
