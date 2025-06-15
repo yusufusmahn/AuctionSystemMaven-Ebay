@@ -1,8 +1,7 @@
 package org.AuctionSystemEbay.controllers;
 
 import org.AuctionSystemEbay.dtos.requests.TransactionRequest;
-import org.AuctionSystemEbay.dtos.responses.ApiResponse;
-import org.AuctionSystemEbay.dtos.responses.TransactionResponse;
+import org.AuctionSystemEbay.dtos.responses.*;
 import org.AuctionSystemEbay.exceptions.AuctionSystemException;
 import org.AuctionSystemEbay.services.*;
 import org.springframework.http.HttpStatus;
