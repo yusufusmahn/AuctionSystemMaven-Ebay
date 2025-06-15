@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class TransactionServiceImplTest {
+public class TransactionServiceImplTest {
 
     @Autowired
     private TransactionService transactionService;
@@ -31,21 +31,21 @@ class TransactionServiceImplTest {
     private AuctionItemRepository auctionItemRepository;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         transactionRepository.deleteAll();
         userRepository.deleteAll();
 
         User testUser = new User();
         testUser.setUserId("789012");
-        testUser.setUsername("Jane Doe");
-        testUser.setEmail("jane@email.com");
-        testUser.setPassword("password123");
+        testUser.setUsername("testUser");
+        testUser.setEmail("testUser@email.com");
+        testUser.setPassword("password");
         testUser.setRole("BUYER");
         userRepository.save(testUser);
     }
 
     @Test
-    void createTransaction_Success() {
+    public void createTransaction_Success() {
         TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAuctionItemId("123456");
         transactionRequest.setBuyerId("789012");
@@ -58,7 +58,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void createTransaction_BuyerNotFound_ThrowsException() {
+    public void createTransaction_BuyerNotFound_ThrowsException() {
         TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAuctionItemId("123456");
         transactionRequest.setBuyerId("nonexistent");
@@ -68,7 +68,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void createTransaction_InvalidRequest_ThrowsException() {
+    public void createTransaction_InvalidRequest_ThrowsException() {
         TransactionRequest transactionRequest = new TransactionRequest();
         transactionRequest.setAuctionItemId(null);
         transactionRequest.setBuyerId("789012");
@@ -78,7 +78,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void getTransactionsByUserId_Success() {
+    public void getTransactionsByUserId_Success() {
         TransactionRequest transactionRequest1 = new TransactionRequest();
         transactionRequest1.setAuctionItemId("123456");
         transactionRequest1.setBuyerId("789012");
@@ -106,12 +106,12 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void getTransactionsByUserId_InvalidUserId_ThrowsException() {
+    public void getTransactionsByUserId_InvalidUserId_ThrowsException() {
         assertThrows(UserNotFoundException.class, () -> transactionService.getTransactionsByUserId(null));
     }
 
     @Test
-    void getActiveTransactions_Success() {
+    public void getActiveTransactions_Success() {
         AuctionItem activeItem = new AuctionItem();
         activeItem.setItemId("123456");
         activeItem.setEndTime(LocalDateTime.now().plusDays(1));
@@ -130,7 +130,7 @@ class TransactionServiceImplTest {
     }
 
     @Test
-    void getActiveTransactions_ExpiredAuction_ReturnsEmpty() {
+    public void getActiveTransactions_ExpiredAuction_ReturnsEmpty() {
         AuctionItem expiredItem = new AuctionItem();
         expiredItem.setItemId("789012");
         expiredItem.setEndTime(LocalDateTime.now().minusDays(1));
