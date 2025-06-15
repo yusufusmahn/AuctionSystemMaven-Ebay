@@ -105,8 +105,6 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("Invalid password");
         }
 
-
-
         return Mapper.toLoginResponse(user, "Login successful");
     }
 
