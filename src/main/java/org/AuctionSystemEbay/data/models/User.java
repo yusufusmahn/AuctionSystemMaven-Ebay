@@ -18,6 +18,4 @@ public class User {
         return this.password != null && this.password.equals(inputPassword);
     }
 
-
-
 }
