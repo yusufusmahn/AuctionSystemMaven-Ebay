@@ -101,6 +101,11 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new UserNotFoundException("User not found with email: " + transformedEmail);
         }
+
+        if (user.getPassword() == null || user.getPassword().trim().length() < 6) {
+            throw new InvalidCredentialsException("Password must be at least 6 characters");
+        }
+
         if (!user.verifyPassword(loginRequest.getPassword())) {
             throw new InvalidCredentialsException("Invalid password");
         }
