@@ -184,6 +184,7 @@ import java.util.List;
         assertEquals(75.0, transactions.get(0).getFinalPrice());
 
     }
+
 }
 
 
