@@ -39,8 +39,8 @@ public class UserServiceImpl implements UserService {
 
         User user = Mapper.toUser(userRequest);
         user.setUserId(idService.generateUniqueId());
-//        String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
-//        user.setPassword(hashedPassword);
+//      String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
+//      user.setPassword(hashedPassword);
         String hashedPassword = userRequest.getPassword();
         user.setPassword(hashedPassword);
 
